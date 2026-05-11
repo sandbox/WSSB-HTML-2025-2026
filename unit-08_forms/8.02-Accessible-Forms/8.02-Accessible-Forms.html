@@ -1,0 +1,255 @@
+<!--
+8.02 Accessible Forms
+
+8.02 Do Now
+Open the volunteer sign-up form from the 8.01 lab in your browser and
+navigate it with your screen reader.
+
+As you move through the form, notice:
+- When you land on a radio button, does your screen reader tell you
+  what the group question is, or just the option name?
+- When you land on a text input, does your screen reader tell you
+  anything beyond the label?
+
+We will fix the problems you find today.
+
+8.02 Lesson
+
+In lesson 8.01 we used <label> tags to connect text descriptions to
+inputs. That handles single inputs well. But today we will look at
+four situations where a label alone is not enough:
+
+  1. Groups of radio buttons or checkboxes
+  2. Inputs that need extra instructions
+  3. Required fields
+  4. Validation errors
+
+=======================================================
+CONCEPT 1: Grouping with <fieldset> and <legend>
+=======================================================
+
+Problem:
+In lesson 8.01, we used a <p> tag above our radio buttons:
+
+  <p>Favorite season:</p>
+  <label><input type="radio" name="season" value="spring"> Spring</label>
+  <label><input type="radio" name="season" value="summer"> Summer</label>
+
+When a screen reader lands on the Spring radio button, it announces:
+  "Spring, radio button, 1 of 4"
+
+The question "Favorite season" is NOT announced — it is just a
+paragraph floating above the inputs with no connection to them.
+
+Solution: <fieldset> and <legend>
+Wrap the entire group in a <fieldset> tag.
+Put the group question in a <legend> tag as the first child.
+The legend is permanently associated with every input in the fieldset.
+
+Now when a screen reader lands on Spring, it announces:
+  "Favorite season, Spring, radio button, 1 of 4"
+
+Use <fieldset> and <legend> for EVERY group of radio buttons or
+checkboxes.
+-->
+
+<!-- Without fieldset (from lesson 8.01 — problematic): -->
+<p>Favorite season:</p>
+<label><input type="radio" name="season-bad" value="spring"> Spring</label>
+<label><input type="radio" name="season-bad" value="summer"> Summer</label>
+
+<!-- With fieldset and legend (correct): -->
+<fieldset>
+  <legend>Favorite season</legend>
+  <label><input type="radio" name="season" value="spring"> Spring</label>
+  <label><input type="radio" name="season" value="summer"> Summer</label>
+  <label><input type="radio" name="season" value="fall"> Fall</label>
+  <label><input type="radio" name="season" value="winter"> Winter</label>
+</fieldset>
+
+<!--
+The same fix applies to checkboxes:
+-->
+
+<fieldset>
+  <legend>Which languages have you studied? (check all that apply)</legend>
+  <label><input type="checkbox" name="languages" value="spanish"> Spanish</label>
+  <label><input type="checkbox" name="languages" value="french"> French</label>
+  <label><input type="checkbox" name="languages" value="mandarin"> Mandarin</label>
+  <label><input type="checkbox" name="languages" value="arabic"> Arabic</label>
+</fieldset>
+
+<!--
+=======================================================
+CONCEPT 2: Extra instructions with aria-describedby
+=======================================================
+
+Problem:
+Sometimes an input needs more than just a label — a format hint,
+a character limit, or a note about what to enter.
+
+If you put that hint in a <p> tag nearby, sighted users can read it,
+but screen readers do not automatically connect it to the input.
+
+Solution: aria-describedby
+Give the hint text an id. Then add aria-describedby="that-id" to the
+input. The screen reader will announce the label first, then the
+description when the user focuses the input.
+
+Announcement with aria-describedby:
+  "Full Name, edit text, Enter your first and last name."
+-->
+
+<label for="full-name">Full Name</label>
+<p id="name-hint">Enter your first and last name.</p>
+<input type="text" id="full-name" name="full-name"
+       aria-describedby="name-hint">
+
+<!--
+You can point aria-describedby at multiple ids by separating them
+with a space. The descriptions are announced in the order listed:
+-->
+
+<label for="password">Password</label>
+<p id="pw-length">Must be at least 8 characters.</p>
+<p id="pw-chars">Use a mix of letters, numbers, and symbols.</p>
+<input type="text" id="password" name="password"
+       aria-describedby="pw-length pw-chars">
+
+<!--
+=======================================================
+CONCEPT 3: Required fields
+=======================================================
+
+Problem:
+Sighted users can see a red asterisk (*) marking required fields,
+but that visual cue is invisible to a screen reader.
+
+Solution: the required attribute
+Adding required to an input causes the browser to:
+  1. Block form submission if the field is empty
+  2. Tell the screen reader the field is required
+
+Announcement:
+  "Full Name, required, edit text"
+
+You can also use aria-required="true" — this does the same thing but
+does not trigger browser validation. Use required when you want the
+browser to enforce the field, aria-required when your JavaScript
+handles validation instead.
+-->
+
+<label for="req-name">Full Name</label>
+<input type="text" id="req-name" name="full-name" required>
+
+<label for="req-email">Email Address</label>
+<input type="email" id="req-email" name="email" required>
+
+<!--
+=======================================================
+CONCEPT 4: Validation errors with aria-invalid and aria-describedby
+=======================================================
+
+Problem:
+When a form field has an error, sighted users can see a red border
+or an error message. Screen readers need a direct signal too.
+
+Solution: aria-invalid and aria-describedby together
+  - Set aria-invalid="true" on the input that has an error.
+    The screen reader announces: "Full Name, invalid entry, edit text"
+  - Put the error message in a nearby element with an id.
+  - Point aria-describedby at that id so the error message is also
+    announced when the user lands on the field.
+
+When the error is corrected, remove aria-invalid (or set it to "false")
+and remove or hide the error message. JavaScript typically handles
+adding and removing these attributes based on what the user types.
+-->
+
+<label for="err-email">Email Address</label>
+<p id="email-error">Please enter a valid email address.</p>
+<input type="email" id="err-email" name="email"
+       aria-invalid="true"
+       aria-describedby="email-error">
+
+<!--
+Combining all of the above on one input:
+-->
+
+<label for="full-example">Email Address</label>
+<p id="ex-hint">We will send your confirmation here.</p>
+<p id="ex-error">Please enter a valid email address.</p>
+<input type="email" id="full-example" name="email"
+       required
+       aria-invalid="true"
+       aria-describedby="ex-hint ex-error">
+
+<!--
+Announcement when invalid:
+  "Email Address, required, invalid entry, edit text,
+   We will send your confirmation here.
+   Please enter a valid email address."
+
+=======================================================
+PUTTING IT TOGETHER
+=======================================================
+
+The volunteer sign-up form from lesson 8.01, updated with all of
+the accessible patterns from this lesson:
+-->
+
+<form>
+
+  <label for="volunteer-name">Full Name</label>
+  <p id="name-help">Enter your first and last name.</p>
+  <input type="text" id="volunteer-name" name="volunteer-name"
+         required aria-describedby="name-help"
+         placeholder="Jane Smith">
+
+  <label for="volunteer-email">Email Address</label>
+  <input type="email" id="volunteer-email" name="volunteer-email"
+         required placeholder="jane@example.com">
+
+  <fieldset>
+    <legend>Which program area would you like to volunteer with?</legend>
+    <label><input type="radio" name="program" value="youth-arts"> Youth Arts</label>
+    <label><input type="radio" name="program" value="adult-fitness"> Adult Fitness</label>
+    <label><input type="radio" name="program" value="senior-social"> Senior Social</label>
+    <label><input type="radio" name="program" value="tech-help"> Tech Help Desk</label>
+  </fieldset>
+
+  <fieldset>
+    <legend>Which days are you available? (check all that apply)</legend>
+    <label><input type="checkbox" name="days" value="monday"> Monday</label>
+    <label><input type="checkbox" name="days" value="tuesday"> Tuesday</label>
+    <label><input type="checkbox" name="days" value="wednesday"> Wednesday</label>
+    <label><input type="checkbox" name="days" value="thursday"> Thursday</label>
+    <label><input type="checkbox" name="days" value="friday"> Friday</label>
+  </fieldset>
+
+  <label for="notes">Anything else you'd like us to know?</label>
+  <textarea id="notes" name="notes" rows="4"
+            placeholder="Tell us about yourself or any questions you have."></textarea>
+
+  <button type="submit">Send Sign-Up</button>
+
+</form>
+
+<!--
+8.02 Activity
+
+Navigate the two radio button examples at the top of this file with
+your screen reader — the version using <p> and the version using
+<fieldset> and <legend>.
+
+Discuss with the class:
+1. What does the screen reader announce differently between the two?
+2. Why does the fieldset version give you more useful information?
+3. Look back at a form you use regularly. Does it use fieldset/legend
+   for grouped inputs? What does it announce?
+
+8.02 Lab
+See the 8.02-Lab folder.
+You will update the volunteer sign-up form from lesson 8.01 to add
+all of the accessible patterns from today's lesson.
+-->
