@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Green Valley CC — Volunteer Sign-Up</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    header {
+      background-color: #2c5f2d;
+      color: white;
+      padding: 20px 32px;
+    }
+
+    header p {
+      font-size: 1.125rem;
+      margin-top: 4px;
+    }
+
+    main {
+      max-width: 640px;
+      margin: 32px auto;
+      padding: 0 24px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      width: 100%;
+      padding: 8px 10px;
+      font-size: 1rem;
+      border: 1px solid #aaa;
+      border-radius: 4px;
+    }
+
+    fieldset {
+      border: 1px solid #aaa;
+      border-radius: 4px;
+      padding: 12px 16px;
+    }
+
+    legend {
+      font-weight: bold;
+      padding: 0 4px;
+    }
+
+    fieldset label {
+      font-weight: normal;
+      margin-bottom: 0;
+    }
+
+    input[type="radio"],
+    input[type="checkbox"] {
+      margin-right: 6px;
+    }
+
+    .hint {
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 4px;
+    }
+
+    button[type="submit"] {
+      align-self: flex-start;
+      background-color: #2c5f2d;
+      color: white;
+      font-size: 1rem;
+      padding: 10px 24px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #1a3d1b;
+    }
+
+    footer {
+      background-color: #2c5f2d;
+      color: white;
+      text-align: center;
+      padding: 16px;
+      margin-top: 48px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Green Valley Community Center</h1>
+    <p>Volunteer Sign-Up</p>
+  </header>
+
+  <main>
+    <form id="signup-form">
+
+      <div>
+        <label for="volunteer-name">Full Name</label>
+        <p id="name-hint" class="hint">Enter your first and last name.</p>
+        <input type="text" id="volunteer-name" name="volunteer-name"
+               required aria-describedby="name-hint"
+               placeholder="Jane Smith">
+      </div>
+
+      <div>
+        <label for="volunteer-email">Email Address</label>
+        <input type="email" id="volunteer-email" name="volunteer-email"
+               required placeholder="jane@example.com">
+      </div>
+
+      <fieldset>
+        <legend>Which program area would you like to volunteer with?</legend>
+        <label><input type="radio" name="program" value="youth-arts"> Youth Arts</label>
+        <label><input type="radio" name="program" value="adult-fitness"> Adult Fitness</label>
+        <label><input type="radio" name="program" value="senior-social"> Senior Social</label>
+        <label><input type="radio" name="program" value="tech-help"> Tech Help Desk</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Which days are you available? (check all that apply)</legend>
+        <label><input type="checkbox" name="days" value="monday"> Monday</label>
+        <label><input type="checkbox" name="days" value="tuesday"> Tuesday</label>
+        <label><input type="checkbox" name="days" value="wednesday"> Wednesday</label>
+        <label><input type="checkbox" name="days" value="thursday"> Thursday</label>
+        <label><input type="checkbox" name="days" value="friday"> Friday</label>
+      </fieldset>
+
+      <div>
+        <label for="notes">Anything else you'd like us to know?</label>
+        <textarea id="notes" name="notes" rows="4"
+                  placeholder="Tell us about yourself or any questions you have."></textarea>
+      </div>
+
+      <button type="submit">Send Sign-Up</button>
+
+    </form>
+  </main>
+
+  <footer>
+    <p>Green Valley Community Center &middot; 123 Oak Street &middot; (555) 234-5678</p>
+  </footer>
+
+</body>
+</html>
